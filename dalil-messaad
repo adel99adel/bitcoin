@@ -1,0 +1,251 @@
+index.html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">          
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#087f5b">
+  <meta name="description" content="دليل مسعد المحلي للمحلات والخدمات والمطاعم والحرفيين.">
+  <title>دليل مسعد | خدمات مدينتك</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial, sans-serif;
+      background: #f4f7f6;
+      color: #18352d;
+    }
+    header {
+      background: #087f5b;
+      color: white;
+      padding: 24px 16px 30px;
+      border-radius: 0 0 24px 24px;
+    }
+    .container { width: min(100% - 28px, 1000px); margin: auto; }
+    .brand { font-size: 27px; font-weight: bold; }
+    header p { line-height: 1.8; }
+    .search {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    input, button { font: inherit; }
+    input {
+      min-width: 0;
+      padding: 13px;
+      border: 1px solid #d7e3de;
+      border-radius: 12px;
+      width: 100%;
+    }
+    .search input { border: 0; }
+    .section-title { margin: 24px 0 14px; font-size: 21px; }
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+    .category {
+      border: 1px solid #d5e6df;
+      background: white;
+      color: #087f5b;
+      border-radius: 20px;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+    .category.active, .primary {
+      background: #087f5b;
+      color: white;
+      border-color: #087f5b;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: white;
+      padding: 17px;
+      border-radius: 16px;
+      border: 1px solid #e4ece8;
+      box-shadow: 0 3px 12px #173b2b08;
+    }
+    .emoji { font-size: 28px; }
+    .card h3 { margin: 10px 0; }
+    .muted { color: #65766f; font-size: 14px; line-height: 1.8; }
+    .tag {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 8px;
+      background: #e7f6ef;
+      color: #087f5b;
+      font-size: 12px;
+    }
+    .contact {
+      display: inline-block;
+      margin-top: 12px;
+      color: #087f5b;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .empty {
+      padding: 24px;
+      text-align: center;
+      color: #65766f;
+      background: white;
+      border-radius: 14px;
+    }
+    footer {
+      text-align: center;
+      padding: 28px 12px;
+      color: #65766f;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="brand">📍 دليل مسعد</div>
+      <p>كل ما تبحث عنه في مسعد، في مكان واحد.</p>
+      <div class="search">
+        <input id="search" type="search"
+          placeholder="ابحث عن محل أو خدمة..."
+          aria-label="البحث عن خدمة">
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2 class="section-title">اكتشف الخدمات</h2>
+    <div class="categories" id="categories">
+      <button class="category active" data-category="الكل">الكل</button>
+      <button class="category" data-category="مطاعم">🍽 مطاعم</button>
+      <button class="category" data-category="محلات">🛍 محلات</button>
+      <button class="category" data-category="صحة">🩺 صحة</button>
+      <button class="category" data-category="حرفيون">🛠 حرفيون</button>
+      <button class="category" data-category="خدمات">📋 خدمات</button>
+    </div>
+
+    <h2 class="section-title">دليل الخدمات المحلية</h2>
+    <div class="cards" id="cards"></div>
+    <p class="muted">
+      هل تملك محلًا في مسعد؟ يمكن إضافة خدمة تسجيل المحلات
+      بعد تجهيز قاعدة البيانات والتحقق من المعلومات.
+    </p>
+  </main>
+
+  <footer>
+    <strong>دليل مسعد</strong><br>
+    دليل محلي قيد التطوير — المعلومات التجريبية ليست إعلانات مؤكدة.<br>
+    © <span id="year"></span> دليل مسعد
+  </footer>
+
+  <script>
+    const services = [
+      {
+        name: "مثال: مطعم محلي",
+        category: "مطاعم",
+        emoji: "🍽",
+        description: "أضف اسم المطعم وعنوانه وساعات العمل."
+      },
+      {
+        name: "مثال: محل مواد غذائية",
+        category: "محلات",
+        emoji: "🛍",
+        description: "أضف اسم المحل وموقعه ومعلومات التواصل."
+      },
+      {
+        name: "مثال: عيادة طبية",
+        category: "صحة",
+        emoji: "🩺",
+        description: "أضف التخصص والعنوان ورقم الحجز بعد التحقق."
+      },
+      {
+        name: "مثال: كهربائي",
+        category: "حرفيون",
+        emoji: "🛠",
+        description: "أضف مجال العمل ومناطق تقديم الخدمة."
+      },
+      {
+        name: "مثال: خدمات إدارية",
+        category: "خدمات",
+        emoji: "📋",
+        description: "أضف وصف الخدمة والعنوان ووسيلة التواصل."
+      }
+    ];
+
+    const cards = document.getElementById("cards");
+    const search = document.getElementById("search");
+    const categoryButtons = document.querySelectorAll(".category");
+    let selectedCategory = "الكل";
+
+    function renderServices() {
+      const query = search.value.trim().toLowerCase();
+
+      const results = services.filter(service => {
+        const matchesCategory =
+          selectedCategory === "الكل" ||
+          service.category === selectedCategory;
+
+        const text = (
+          service.name + " " +
+          service.category + " " +
+          service.description
+        ).toLowerCase();
+
+        return matchesCategory && text.includes(query);
+      });
+
+      cards.innerHTML = "";
+
+      if (!results.length) {
+        cards.innerHTML =
+          '<div class="empty">لا توجد نتائج. جرّب كلمة أخرى.</div>';
+        return;
+      }
+
+      results.forEach(service => {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const emoji = document.createElement("div");
+        emoji.className = "emoji";
+        emoji.textContent = service.emoji;
+
+        const title = document.createElement("h3");
+        title.textContent = service.name;
+
+        const tag = document.createElement("span");
+        tag.className = "tag";
+        tag.textContent = service.category;
+
+        const description = document.createElement("p");
+        description.className = "muted";
+        description.textContent = service.description;
+
+        card.append(emoji, title, tag, description);
+        cards.appendChild(card);
+      });
+    }
+
+    categoryButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        selectedCategory = button.dataset.category;
+
+        categoryButtons.forEach(item =>
+          item.classList.toggle("active", item === button)
+        );
+
+        renderServices();
+      });
+    });
+
+    search.addEventListener("input", renderServices);
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    renderServices();
+  </script>
+</body>
+</html>
